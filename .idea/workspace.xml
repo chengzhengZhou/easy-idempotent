@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ef979800-449f-4499-a757-c490406446b5" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="userSettingsFile" value="C:\Users\28602\.m2\settings-local.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1lddo9psszwg4W9CzeaxpcFyXTn" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/easy-idempotent-spring/src/main/resources" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="cn.carbank" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cn.carbank.repository" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-spring\src\main\resources" />
+      <recent name="D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-spring\src\main\java\cn\carbank" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Tester2">
+    <configuration name="AppTester" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cn.carbank.AppTester" />
+      <module name="easy-idempotent-spring" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cn.carbank.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LockTester" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cn.carbank.LockTester" />
+      <module name="core" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cn.carbank.locksupport.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Tester2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cn.carbank.Tester2" />
+      <module name="core" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cn.carbank.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Tester2" />
+        <item itemvalue="Application.AppTester" />
+        <item itemvalue="Application.LockTester" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ef979800-449f-4499-a757-c490406446b5" name="Default Changelist" comment="" />
+      <created>1607931073340</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607931073340</updated>
+      <workItem from="1607931075995" duration="16567000" />
+      <workItem from="1607995317911" duration="29707000" />
+      <workItem from="1608037273924" duration="5017000" />
+      <workItem from="1608083070432" duration="27324000" />
+      <workItem from="1608121397931" duration="5394000" />
+      <workItem from="1608168543257" duration="4786000" />
+      <workItem from="1608173347248" duration="2768000" />
+      <workItem from="1608190617824" duration="1299000" />
+      <workItem from="1608212078576" duration="5635000" />
+      <workItem from="1608254811893" duration="28166000" />
+      <workItem from="1608301785013" duration="2986000" />
+      <workItem from="1608370302780" duration="10438000" />
+      <workItem from="1608392065481" duration="878000" />
+      <workItem from="1608393095101" duration="39000" />
+      <workItem from="1608393154351" duration="3754000" />
+      <workItem from="1608453057504" duration="2892000" />
+      <workItem from="1608514596051" duration="4003000" />
+      <workItem from="1608528640855" duration="10149000" />
+      <workItem from="1608560249391" duration="4705000" />
+      <workItem from="1608601149012" duration="9539000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="648" y="50" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog" timestamp="1608121907382">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="648" y="50" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1608121907382" />
+    <state x="504" y="215" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1607935922283">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="504" y="215" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1607935922283" />
+    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser" timestamp="1608602021213">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="574" y="128" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1608602021213" />
+    <state x="503" y="271" width="529" height="292" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1608370384695">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="503" y="271" width="529" height="292" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1536.824@0.0.1536.824" timestamp="1608370384695" />
+    <state x="227" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1608304301241">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="227" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1608304301241" />
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1608604356853">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1608604356853" />
+    <state width="540" height="466" key="DebuggerActiveHint" timestamp="1608111144291">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="540" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1608111144291" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1607931111029">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1607931111029" />
+    <state width="1492" height="257" key="GridCell.Tab.0.bottom" timestamp="1608613923261">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="257" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1608613923261" />
+    <state width="1492" height="257" key="GridCell.Tab.0.center" timestamp="1608613923260">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="257" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1608613923260" />
+    <state width="1492" height="257" key="GridCell.Tab.0.left" timestamp="1608613923260">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="257" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1608613923260" />
+    <state width="1492" height="257" key="GridCell.Tab.0.right" timestamp="1608613923260">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="257" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1608613923260" />
+    <state width="1492" height="318" key="GridCell.Tab.1.bottom" timestamp="1608287704927">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="318" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1608287704927" />
+    <state width="1492" height="318" key="GridCell.Tab.1.center" timestamp="1608287704927">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="318" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1608287704927" />
+    <state width="1492" height="318" key="GridCell.Tab.1.left" timestamp="1608287704927">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="318" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1608287704927" />
+    <state width="1492" height="318" key="GridCell.Tab.1.right" timestamp="1608287704927">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1492" height="318" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1608287704927" />
+    <state x="270" y="54" key="SettingsEditor" timestamp="1607931115956">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="270" y="54" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1607931115956" />
+    <state x="490" y="154" width="540" height="524" key="StructurePopup" timestamp="1608173156324">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="490" y="154" width="540" height="524" key="StructurePopup/0.0.1536.824@0.0.1536.824" timestamp="1608173156324" />
+    <state x="447" y="150" width="642" height="524" key="find.popup" timestamp="1608396202727">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="447" y="150" width="642" height="524" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1608396202727" />
+    <state x="178" y="107" key="new project wizard" timestamp="1608173491717">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="178" y="107" key="new project wizard/0.0.1536.824@0.0.1536.824" timestamp="1608173491717" />
+    <state x="511" y="30" key="refactoring.ChangeSignatureDialog" timestamp="1608269913686">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="511" y="30" key="refactoring.ChangeSignatureDialog/0.0.1536.824@0.0.1536.824" timestamp="1608269913686" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1608602543347">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1608602543347" />
+    <state x="371" y="95" key="spring file set editor" timestamp="1608097113049">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="371" y="95" key="spring file set editor/0.0.1536.824@0.0.1536.824" timestamp="1608097113049" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/main/java/cn/carbank/repository/MemoryIdempotentRecordRepoImpl.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

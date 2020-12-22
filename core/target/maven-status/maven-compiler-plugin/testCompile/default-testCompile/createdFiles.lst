@@ -1,0 +1,2 @@
+cn\carbank\RedisIdempotentRecordRepoImpl.class
+cn\carbank\MysqlIdempotentRecordRepoImpl.class
