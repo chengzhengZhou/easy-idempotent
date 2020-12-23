@@ -13,19 +13,19 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class IdempotentCommand<R> extends AbstractCommand<R> implements IdempotentInvokable<R> {
 
-    IdempotentCommand(IdempotentRequest idempotentRequest) {
+    public IdempotentCommand(IdempotentRequest idempotentRequest) {
         super(idempotentRequest);
     }
 
-    IdempotentCommand(IdempotentRequest idempotentRequest, ExecutorService executorService) {
+    public IdempotentCommand(IdempotentRequest idempotentRequest, ExecutorService executorService) {
         super(idempotentRequest, executorService);
     }
 
-    IdempotentCommand(IdempotentRequest idempotentRequest, ExecutorService executorService, LockClientFactory lockClientFactory, RecordRepositoryFactory recordRepositoryFactory) {
+    public IdempotentCommand(IdempotentRequest idempotentRequest, ExecutorService executorService, LockClientFactory lockClientFactory, RecordRepositoryFactory recordRepositoryFactory) {
         super(idempotentRequest, executorService, lockClientFactory, recordRepositoryFactory);
     }
 
-    IdempotentCommand(Setter setter) {
+    public IdempotentCommand(Setter setter) {
         super(setter);
     }
 

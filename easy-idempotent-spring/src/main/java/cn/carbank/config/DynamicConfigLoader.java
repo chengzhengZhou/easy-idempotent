@@ -29,7 +29,9 @@ public abstract class DynamicConfigLoader {
         IdempotentConfig config = new IdempotentConfig();
         Properties props = new Properties();
         try (InputStream in = DynamicConfigLoader.class.getClassLoader().getResourceAsStream(DEFAULT_PROPERTY_FILE)) {
-            props.load(in);
+            if (in != null) {
+                props.load(in);
+            }
         } catch (FileNotFoundException e) {
             logger.error("{} not found.", DEFAULT_PROPERTY_FILE);
         } catch (IOException e) {
@@ -45,7 +47,6 @@ public abstract class DynamicConfigLoader {
         String core = props.getProperty("idempotent.core", "1");
         String max = props.getProperty("idempotent.max", "10");
         String storage = props.getProperty("idempotent.storage");
-        Assert.notNull(groupName, "idempotent.lock.group_name is required.");
 
         List<StorageConfig> storageConfigList = new ArrayList<>();
         StorageConfig storageConfig;

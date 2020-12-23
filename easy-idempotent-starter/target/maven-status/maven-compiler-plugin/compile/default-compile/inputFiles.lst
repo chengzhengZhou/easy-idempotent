@@ -1,0 +1,5 @@
+D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-starter\src\main\java\cn\carbank\configuration\IdempotentConfiguration.java
+D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-starter\src\main\java\cn\carbank\configuration\IdempotentProperties.java
+D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-starter\src\main\java\cn\carbank\RedisRepo.java
+D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-starter\src\main\java\cn\carbank\app.java
+D:\projects\coding\幂等系统\easy-idempotent\easy-idempotent-starter\src\main\java\cn\carbank\RedisLockClient.java
