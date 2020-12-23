@@ -2,19 +2,17 @@ package cn.carbank.configuration;
 
 import cn.carbank.IdempotentAdvisor;
 import cn.carbank.IdempotentInterceptor;
-import cn.carbank.RedisLockClient;
-import cn.carbank.RedisRepo;
+import cn.carbank.locksupport.RedisLockClient;
+import cn.carbank.repository.RedisRepoImpl;
 import cn.carbank.config.DynamicConfigLoader;
 import cn.carbank.config.IdempotentConfig;
 import cn.carbank.locksupport.LockClient;
 import cn.carbank.repository.IdempotentRecordRepo;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 
 /**
@@ -60,7 +58,7 @@ public class IdempotentConfiguration {
     @Bean
     @ConditionalOnMissingBean(IdempotentRecordRepo.class)
     public IdempotentRecordRepo idempotentRecordRepo() {
-        return new RedisRepo();
+        return new RedisRepoImpl();
     }
 
 }

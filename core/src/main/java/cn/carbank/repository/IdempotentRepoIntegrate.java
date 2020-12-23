@@ -70,29 +70,6 @@ public class IdempotentRepoIntegrate {
         return merge(futures);
     }
 
-    /*public IdempotentRecord get(String key, List<StorageConfig> configList) {
-        // 有一个存在则返回
-        IdempotentRecord idempotentRecord = null;
-        for (StorageConfig config : configList) {
-            idempotentRecord = map.get(config.getStoreModule().name()).get(key);
-            if (idempotentRecord != null) {
-                break;
-            }
-        }
-        return idempotentRecord;
-    }
-
-    public boolean delete(String key, List<StorageConfig> configList) {
-        for (StorageConfig config : configList) {
-            boolean pass = map.get(config.getStoreModule().name()).delete(key);
-            if (!pass) {
-                // 失败则不断重试，直到删除
-
-            }
-        }
-        return true;
-    }*/
-
     public ExecutorService getExecutor() {
         return executor;
     }

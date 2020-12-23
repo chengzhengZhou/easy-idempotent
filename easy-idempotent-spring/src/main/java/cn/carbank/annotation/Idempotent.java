@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Idempotent {
     /**
-     * 锁的名称,支持SPEL表达式（默认为方法名）
+     * 锁的名称,支持SPEL表达式（默认为方法全名）
      * @return
      */
     String value() default "";
@@ -35,7 +35,7 @@ public @interface Idempotent {
     long tryTimeout() default 0;
 
     /**
-     * 幂等Key,支持SPEL表达式（默认为参数json串的md5）
+     * 幂等Key,支持SPEL表达式（默认为方法名加参数MD5）
      * @return
      */
     String key() default "";

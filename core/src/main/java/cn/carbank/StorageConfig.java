@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 public class StorageConfig {
 
     /**
-     * 存储等级(不要超过2级)
-     * 1-一级 2-二级
+     * 存储等级
+     * 1-一级 2-二级 ...
      */
     private int level;
     /**

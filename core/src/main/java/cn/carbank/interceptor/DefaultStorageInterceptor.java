@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class DefaultStorageInterceptor implements MethodInterceptor {
 
+    private static final String DEFAULT_VAL = "1";
     private final IdempotentRepoIntegrate repo;
 
     public DefaultStorageInterceptor(ExecutorService executorService) {
@@ -29,14 +30,12 @@ public class DefaultStorageInterceptor implements MethodInterceptor {
 
     @Override
     public boolean preProcess(IdempotentRequest methodInfo) {
-        // 幂等判断,不存在则放行
         return !repo.exist(methodInfo.getKey(), methodInfo.getStoreConfigList());
     }
 
     @Override
     public void postProcess(Object re, IdempotentRequest methodInfo) {
-        // 缓存key
-        repo.add(methodInfo.getKey(), "1", methodInfo.getStoreConfigList());
+        repo.add(methodInfo.getKey(), DEFAULT_VAL, methodInfo.getStoreConfigList());
     }
 
     @Override
@@ -53,8 +52,7 @@ public class DefaultStorageInterceptor implements MethodInterceptor {
                 }
             }
         }
-        System.out.println("异常缓存");
-        repo.add(methodInfo.getKey(), "1", methodInfo.getStoreConfigList());
+        repo.add(methodInfo.getKey(), DEFAULT_VAL, methodInfo.getStoreConfigList());
     }
 
 }

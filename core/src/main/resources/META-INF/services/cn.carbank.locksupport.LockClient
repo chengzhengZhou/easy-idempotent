@@ -1,1 +1,1 @@
-cn.carbank.locksupport.RedisLockClient
+cn.carbank.locksupport.DefaultLockClient

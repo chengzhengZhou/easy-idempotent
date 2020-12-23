@@ -127,7 +127,7 @@ public class IdempotentInvokableFactory {
 
     private String getMethodName(Class<?> beanType, Method method) {
         StringBuilder bd = new StringBuilder();
-        return bd.append(beanType.getName()).append(".").append(method.getName()).toString();
+        return bd.append(beanType.getName()).append("#").append(method.getName()).toString();
     }
 
     private List<StorageConfig> buildStorageConfig(StorageParam[] storageParams) {

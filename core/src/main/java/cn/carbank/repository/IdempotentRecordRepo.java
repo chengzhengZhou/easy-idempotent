@@ -5,7 +5,7 @@ import cn.carbank.IdempotentRecord;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 幂等记录
+ * 幂等记录存储读取
  *
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月14日
@@ -31,17 +31,24 @@ public interface IdempotentRecordRepo {
 
     /**
      * 根据key获取记录
-     * @param key
-     * @return
-     */
-    IdempotentRecord get(String key);
-
-    /**
-     * 删除指定key的记录
+     * 暂未使用到该方法
      *
      * @param key
      * @return
      */
-    boolean delete(String key);
+    default IdempotentRecord get(String key){
+        return null;
+    }
+
+    /**
+     * 删除指定key的记录
+     * 暂未使用到该方法
+     *
+     * @param key
+     * @return
+     */
+    default boolean delete(String key) {
+        return false;
+    }
 
 }

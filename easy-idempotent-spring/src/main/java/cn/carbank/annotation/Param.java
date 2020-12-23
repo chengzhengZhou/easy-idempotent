@@ -7,7 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 请填写类注释
+ * 在jdk8前无法从class中获取参数名称
+ * 因此需要添加指定注解以便获取到实际参数名称
  *
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月16日

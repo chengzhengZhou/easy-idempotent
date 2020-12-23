@@ -64,15 +64,12 @@ public class MetaHolder {
         this.idempotentMethod = idempotentMethod;
     }
 
-    /**
-     * Return the bean for this handler method.
-     */
     public Object getBean() {
         return this.bean;
     }
 
     /**
-     * Return the method for this handler method.
+     * 执行用户业务逻辑的方法
      */
     public Method getMethod() {
         return this.method;
@@ -87,7 +84,9 @@ public class MetaHolder {
     }
 
     /**
-     * Return the method parameters for this handler method.
+     * 方法参数信息
+     *
+     * @return
      */
     public MethodParameter[] getMethodParameters() {
         return this.parameters;
