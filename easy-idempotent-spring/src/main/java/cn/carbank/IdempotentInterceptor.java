@@ -11,11 +11,17 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.BridgeMethodResolver;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 拦截器
@@ -80,10 +86,17 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
 
     private static class MetaHolderFactory {
 
+        private final Map<Method, MetaHolder> registry = new HashMap<>();
+
         public MetaHolder create(MethodInvocation invocation) {
             Object proxy = invocation.getThis();
             Method method = invocation.getMethod();
-            return create(proxy, method);
+            MetaHolder metaHolder = registry.get(method);
+            if (metaHolder == null) {
+                metaHolder = create(proxy, method);
+                registry.put(method, metaHolder);
+            }
+            return metaHolder;
         }
 
         private MetaHolder create(Object proxy, Method method) {
@@ -92,10 +105,25 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
             metaHolder.setIdempotent(idempotent);
 
             Class<?>[] parameterTypes = method.getParameterTypes();
-            Method idempotentMethod = ClassUtils.getMethod(metaHolder.getBeanType(), idempotent.idempotentMethod(), parameterTypes);
+            Method idempotentMethod = getMethod(metaHolder.getBeanType(), idempotent.idempotentMethod(), parameterTypes);
             Assert.notNull(idempotentMethod, "Idempotent method is required.");
-            metaHolder.setIdempotentMethod(idempotentMethod);
+            metaHolder.setIdempotentMethod(BridgeMethodResolver.findBridgedMethod(idempotentMethod));
             return metaHolder;
+        }
+
+        private Method getMethod(Class<?> type, String name, Class<?>... parameterTypes) {
+            Method[] methods = type.getDeclaredMethods();
+            for (Method method : methods) {
+                if (method.getName().equals(name) && Arrays.equals(method.getParameterTypes(), parameterTypes)) {
+                    return method;
+                }
+            }
+            Class<?> superClass = type.getSuperclass();
+            if (superClass != null && !superClass.equals(Object.class)) {
+                return getMethod(superClass, name, parameterTypes);
+            } else {
+                return null;
+            }
         }
     }
 }

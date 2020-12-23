@@ -2,9 +2,11 @@ package cn.carbank;
 
 import cn.carbank.annotation.Idempotent;
 import org.springframework.core.BridgeMethodResolver;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.SynthesizingMethodParameter;
@@ -35,14 +37,14 @@ public class MetaHolder {
     private final MethodParameter[] parameters;
     @Nullable
     private volatile List<Annotation[][]> interfaceParameterAnnotations;
-    private final LocalVariableTableParameterNameDiscoverer parameterNameDiscoverer;
+    private final ParameterNameDiscoverer parameterNameDiscoverer;
 
     public MetaHolder(Object bean, Method method) {
         Assert.notNull(bean, "Bean is required");
         Assert.notNull(method, "Method is required");
         this.bean = bean;
         this.method = method;
-        this.parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
+        this.parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
         this.beanType = ClassUtils.getUserClass(bean);
         this.bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
         this.parameters = this.initMethodParameters();

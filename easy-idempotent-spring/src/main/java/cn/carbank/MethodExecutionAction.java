@@ -1,6 +1,7 @@
 package cn.carbank;
 
 import cn.carbank.exception.MethodExecuteException;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ public class MethodExecutionAction implements CommandAction {
     @Override
     public Object execute() throws MethodExecuteException {
         try {
-            method.setAccessible(true);
+            ReflectionUtils.makeAccessible(method);
             return method.invoke(object, _args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new MethodExecuteException(e);
@@ -36,7 +37,7 @@ public class MethodExecutionAction implements CommandAction {
     @Override
     public Object executeWithArgs(Object[] args) throws MethodExecuteException {
         try {
-            method.setAccessible(true);
+            ReflectionUtils.makeAccessible(method);
             return method.invoke(object, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new MethodExecuteException(e);

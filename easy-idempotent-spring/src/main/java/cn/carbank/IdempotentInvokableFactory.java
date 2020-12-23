@@ -148,11 +148,13 @@ public class IdempotentInvokableFactory {
 
     private String getValueBySpel(String spel, MethodParameter[] methodParameters, Object[] arguments) {
         Object result;
-        if (spel.contains("#")) {
+        if (spel.contains(".")) {
             Expression expression = parser.parseExpression(spel);
             EvaluationContext context = new StandardEvaluationContext();
             for (MethodParameter parameter : methodParameters) {
-                context.setVariable(parameter.getParameterName(), arguments[parameter.getParameterIndex()]);
+                String parameterName = parameter.getParameterName();
+                Assert.notNull(parameterName, "can not resolve parameter name of " + parameter);
+                context.setVariable(parameterName, arguments[parameter.getParameterIndex()]);
             }
             result = expression.getValue(context);
         } else {
