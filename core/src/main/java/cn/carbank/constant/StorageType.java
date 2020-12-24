@@ -8,7 +8,7 @@ package cn.carbank.constant;
  */
 public enum StorageType {
 
-    REDIS,MYSQL,MANGO,MEMORY;
+    REDIS,EHCACHE,MYSQL,MANGO,MEMORY;
 
     public static StorageType ofName(String beanName) {
         if (beanName == null) {
@@ -23,6 +23,8 @@ public enum StorageType {
             return MANGO;
         } else if (beanName.startsWith("memory")) {
             return MEMORY;
+        } else if (beanName.startsWith("ehcache")) {
+            return EHCACHE;
         } else {
             // not support
             return null;
