@@ -111,7 +111,7 @@ public class IdempotentInvokableFactory {
         }
         Assert.notNull(key, "idempotent key is required.");
 
-        request.setLockName(lockName);
+        request.setLockName(config.getLockPre() + lockName);
         request.setKey(key);
         request.setExpireTime(idempotent.lockExpireTime());
         request.setTryTimeout(idempotent.tryTimeout());

@@ -11,6 +11,7 @@ import java.util.List;
  * @since 2020年12月16日
  */
 public class IdempotentConfig {
+    private String lockPre;
     /**
      * 核心线程数
      */
@@ -75,8 +76,16 @@ public class IdempotentConfig {
         this.groupName = groupName;
     }
 
+    public String getLockPre() {
+        return lockPre;
+    }
+
+    public void setLockPre(String lockPre) {
+        this.lockPre = lockPre;
+    }
+
     @Override
     public String toString() {
-        return "IdempotentConfig{" + "core=" + core + ", max=" + max + ", namespace=" + namespace + ", groupName='" + groupName + '\'' + ", storage=" + storage + '}';
+        return "IdempotentConfig{" + "lockPre='" + lockPre + '\'' + ", core=" + core + ", max=" + max + ", namespace=" + namespace + ", groupName='" + groupName + '\'' + ", storage=" + storage + '}';
     }
 }

@@ -6,8 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.AnnotationUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,7 +35,9 @@ public class SpringRecordRepositoryFactory extends RecordRepositoryFactory {
             return cache;
         }
         String[] names = applicationContext.getBeanNamesForType(IdempotentRecordRepo.class);
-        List<IdempotentRecordRepo> list = Stream.of(names).map((beanName) -> applicationContext.getBean(beanName, IdempotentRecordRepo.class)).collect(Collectors.toList());
+        List<IdempotentRecordRepo> list = Stream.of(names).map(
+            (beanName) -> applicationContext.getBean(beanName, IdempotentRecordRepo.class))
+            .collect(Collectors.toList());
         setMap(list);
         return super.getRecordRepository();
     }
@@ -41,11 +47,43 @@ public class SpringRecordRepositoryFactory extends RecordRepositoryFactory {
             logger.warn("can not find record repository from spring.");
             return;
         }
-        Map<StorageType, IdempotentRecordRepo> map = new HashMap<>();
+        Map<StorageType, List<IdempotentRecordRepo>> candidates = new HashMap<>();
         list.forEach((item) -> {
-            map.put(StorageType.ofName(item.getClass().getSimpleName()), item);
+            StorageType storageType = StorageType.ofName(item.getClass().getSimpleName());
+            if (candidates.get(storageType) == null) {
+                candidates.put(storageType, new ArrayList<>());
+            }
+            candidates.get(storageType).add(item);
         });
+
+        Map<StorageType, IdempotentRecordRepo> map = new HashMap<>();
+        Iterator<StorageType> iterator = candidates.keySet().iterator();
+        while(iterator.hasNext()) {
+            StorageType next = iterator.next();
+            map.put(next, getMainRepo(candidates.get(next)));
+        }
+
         cache = map;
+    }
+
+    private IdempotentRecordRepo getMainRepo(List<IdempotentRecordRepo> idempotentRecordRepos) {
+        if (idempotentRecordRepos.size() == 1) {
+            return idempotentRecordRepos.get(0);
+        }
+        IdempotentRecordRepo primary = null;
+        for (IdempotentRecordRepo repo : idempotentRecordRepos) {
+            if (repo.getClass().isAnnotationPresent(Primary.class)) {
+                if (primary == null) {
+                    primary = repo;
+                    continue;
+                }
+                throw new UnsupportedOperationException("more than one IdempotentRecordRepos annotated with @Primary. repos: " + idempotentRecordRepos);
+            }
+        }
+        if (primary == null) {
+            throw new UnsupportedOperationException("more than one IdempotentRecordRepos. you can add @Primary annotation on the one of them. repos: " + idempotentRecordRepos);
+        }
+        return primary;
     }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

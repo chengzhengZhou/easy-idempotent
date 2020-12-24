@@ -38,10 +38,12 @@ public abstract class DynamicConfigLoader {
             logger.error("read file {} error", DEFAULT_PROPERTY_FILE);
         }
         fillConfig(props, config);
+        logger.info("load idempotent config success {}", config);
         return config;
     }
 
     private static void fillConfig(Properties props, IdempotentConfig config) {
+        String lockPre = props.getProperty("idempotent.lock.pre", "lock:");
         String groupName = props.getProperty("idempotent.lock.group_name");
         String namespace = props.getProperty("idempotent.lock.namespace", "1");
         String core = props.getProperty("idempotent.core", "1");
@@ -56,7 +58,7 @@ public abstract class DynamicConfigLoader {
                 String item = split[i];
                 if (StringUtils.hasText(item.trim())) {
                     storageConfig = new StorageConfig();
-                    String pre = String.format("idempotent.storage.%s.", item);
+                    String pre = String.format("idempotent.%s.", item);
                     String expireTime = props.getProperty(pre + "expire_time");
                     String timeUnit = props.getProperty(pre + "time_unit");
                     Assert.notNull(expireTime, pre + "expire_time is required.");
@@ -79,6 +81,7 @@ public abstract class DynamicConfigLoader {
             storageConfigList.add(storageConfig);
         }
 
+        config.setLockPre(lockPre);
         config.setGroupName(groupName);
         config.setNamespace(Integer.valueOf(namespace));
         Integer coreSize = Integer.valueOf(core);
@@ -86,6 +89,5 @@ public abstract class DynamicConfigLoader {
         config.setCore(Math.min(coreSize, availableProcessors));
         config.setMax(Integer.valueOf(max));
         config.setStorage(storageConfigList);
-        logger.info("load idempotent config success {}", config);
     }
 }

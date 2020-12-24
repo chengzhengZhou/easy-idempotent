@@ -2,18 +2,19 @@ package cn.carbank.configuration;
 
 import cn.carbank.IdempotentAdvisor;
 import cn.carbank.IdempotentInterceptor;
-import cn.carbank.locksupport.RedisLockClient;
-import cn.carbank.repository.RedisRepoImpl;
-import cn.carbank.config.DynamicConfigLoader;
-import cn.carbank.config.IdempotentConfig;
 import cn.carbank.locksupport.LockClient;
+import cn.carbank.locksupport.RedisLockClient;
 import cn.carbank.repository.IdempotentRecordRepo;
+import cn.carbank.repository.RedisRepoImpl;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * 自动配置
@@ -24,7 +25,8 @@ import org.springframework.util.StringUtils;
 @Configuration
 @ConditionalOnProperty(value = "idempotent.enable", matchIfMissing = true)
 @EnableConfigurationProperties(IdempotentProperties.class)
-public class IdempotentConfiguration {
+@AutoConfigureAfter(RedisAutoConfiguration.class)
+public class IdempotentAutoConfiguration {
 
     @Bean("cn.carbank.IdempotentAdvisor")
     @ConditionalOnMissingBean(IdempotentAdvisor.class)
@@ -35,28 +37,19 @@ public class IdempotentConfiguration {
     @Bean("cn.carbank.IdempotentInterceptor")
     @ConditionalOnMissingBean(IdempotentInterceptor.class)
     public IdempotentInterceptor idempotentInterceptor(IdempotentProperties idempotentProperties) {
-        return new IdempotentInterceptor(buildConfig(idempotentProperties));
-    }
-
-    private IdempotentConfig buildConfig(IdempotentProperties idempotentProperties) {
-        IdempotentConfig config = DynamicConfigLoader.load();
-        if (StringUtils.hasText(idempotentProperties.getGroupName())) {
-            config.setGroupName(idempotentProperties.getGroupName());
-        }
-        if (idempotentProperties.getNamespace() != null) {
-            config.setNamespace(idempotentProperties.getNamespace());
-        }
-        return config;
+        return new IdempotentInterceptor(ConfigSetter.of(idempotentProperties));
     }
 
     @Bean
     @ConditionalOnMissingBean(LockClient.class)
+    @ConditionalOnBean(StringRedisTemplate.class)
     public LockClient lockClient() {
         return new RedisLockClient();
     }
 
     @Bean
-    @ConditionalOnMissingBean(IdempotentRecordRepo.class)
+    @ConditionalOnMissingBean(RedisRepoImpl.class)
+    @ConditionalOnBean(StringRedisTemplate.class)
     public IdempotentRecordRepo idempotentRecordRepo() {
         return new RedisRepoImpl();
     }
