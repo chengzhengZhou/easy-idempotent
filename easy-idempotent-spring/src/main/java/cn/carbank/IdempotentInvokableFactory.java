@@ -127,7 +127,7 @@ public class IdempotentInvokableFactory {
 
     private String getMethodName(Class<?> beanType, Method method) {
         StringBuilder bd = new StringBuilder();
-        return bd.append(beanType.getName()).append("#").append(method.getName()).toString();
+        return bd.append(beanType.getName()).append(".").append(method.getName()).toString();
     }
 
     private List<StorageConfig> buildStorageConfig(StorageParam[] storageParams) {
@@ -148,7 +148,7 @@ public class IdempotentInvokableFactory {
 
     private String getValueBySpel(String spel, MethodParameter[] methodParameters, Object[] arguments) {
         Object result;
-        if (spel.contains(".")) {
+        if (spel.contains("#")) {
             Expression expression = parser.parseExpression(spel);
             EvaluationContext context = new StandardEvaluationContext();
             for (MethodParameter parameter : methodParameters) {
