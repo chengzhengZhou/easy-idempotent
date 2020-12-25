@@ -1,5 +1,6 @@
 package cn.carbank;
 
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ResourceLoaderAware;
@@ -15,13 +16,13 @@ import org.springframework.util.ClassUtils;
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月16日
  */
-public class IdempotentProxyRegistrar implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+public class IdempotentProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanClassLoaderAware {
 
-    private ResourceLoader resourceLoader;
+    private ClassLoader classLoader;
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        boolean present = ClassUtils.isPresent("cn.carbank.configuration.IdempotentAutoConfiguration", resourceLoader.getClassLoader());
+        boolean present = ClassUtils.isPresent("cn.carbank.configuration.IdempotentAutoConfiguration", classLoader);
         if (present) {
             return;
         }
@@ -33,7 +34,7 @@ public class IdempotentProxyRegistrar implements ImportBeanDefinitionRegistrar, 
     }
 
     @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+    public void setBeanClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
     }
 }
