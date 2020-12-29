@@ -5,7 +5,7 @@ import cn.carbank.MethodInterceptor;
 import cn.carbank.constant.StorageType;
 import cn.carbank.exception.MethodExecuteException;
 import cn.carbank.repository.IdempotentRecordRepo;
-import cn.carbank.repository.IdempotentRepoIntegrate;
+import cn.carbank.repository.IdempotentRepoComposite;
 
 import java.util.concurrent.ExecutorService;
 
@@ -18,10 +18,10 @@ import java.util.concurrent.ExecutorService;
 public class DefaultStorageInterceptor implements MethodInterceptor {
 
     private static final String DEFAULT_VAL = "1";
-    private final IdempotentRepoIntegrate repo;
+    private final IdempotentRepoComposite repo;
 
     public DefaultStorageInterceptor(ExecutorService executorService) {
-        repo = new IdempotentRepoIntegrate(executorService);
+        repo = new IdempotentRepoComposite(executorService);
     }
 
     public void add(StorageType storeModule, IdempotentRecordRepo idempotentRecordRepo) {

@@ -19,14 +19,14 @@ import java.util.stream.Stream;
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月14日
  */
-public class IdempotentRepoIntegrate {
+public class IdempotentRepoComposite {
 
-    private final Logger logger = LoggerFactory.getLogger(IdempotentRepoIntegrate.class);
+    private final Logger logger = LoggerFactory.getLogger(IdempotentRepoComposite.class);
     private final Map<String, IdempotentRecordRepo> map = new HashMap<>();
 
     private final ExecutorService executor;
 
-    public IdempotentRepoIntegrate(ExecutorService executor) {
+    public IdempotentRepoComposite(ExecutorService executor) {
         if (executor == null) {
             this.executor = ForkJoinPool.commonPool();
         } else {
