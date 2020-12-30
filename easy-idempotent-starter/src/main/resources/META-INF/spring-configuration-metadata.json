@@ -1,18 +1,18 @@
 {"groups": [
   {
     "name": "idempotent",
-    "type": "cn.carbank.configuration.IdempotentProperties",
-    "sourceType": "cn.carbank.configuration.IdempotentProperties"
+    "type": "cn.carbank.idempotent.configuration.IdempotentProperties",
+    "sourceType": "cn.carbank.idempotent.configuration.IdempotentProperties"
   },
   {
     "name": "idempotent.lock",
-    "type": "cn.carbank.configuration.IdempotentProperties.LockProperties",
-    "sourceType": "cn.carbank.configuration.IdempotentProperties.LockProperties"
+    "type": "cn.carbank.idempotent.configuration.IdempotentProperties.LockProperties",
+    "sourceType": "cn.carbank.idempotent.configuration.IdempotentProperties.LockProperties"
   },
   {
     "name": "idempotent.redis",
-    "type": "cn.carbank.configuration.IdempotentProperties.StorageProperties",
-    "sourceType": "cn.carbank.configuration.IdempotentProperties.StorageProperties"
+    "type": "cn.carbank.idempotent.configuration.IdempotentProperties.StorageProperties",
+    "sourceType": "cn.carbank.idempotent.configuration.IdempotentProperties.StorageProperties"
   }
 ],"properties": [
   {

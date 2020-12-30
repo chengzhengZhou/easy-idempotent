@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.carbank.configuration.IdempotentAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.carbank.idempotent.configuration.IdempotentAutoConfiguration
