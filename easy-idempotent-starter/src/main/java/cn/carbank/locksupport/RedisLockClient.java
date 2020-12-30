@@ -133,7 +133,7 @@ public class RedisLockClient implements LockClient {
                 if (time < 10) {
                     Thread.sleep(10);
                 } else {
-                    long cutTime = (long) time >>> 1;
+                    long cutTime = (long) time >> 1;
                     Thread.sleep(Math.min(100, Math.max(10, cutTime)));
                 }
             }

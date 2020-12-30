@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 拦截器
@@ -83,7 +84,7 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
 
     private static class MetaHolderFactory {
 
-        private final Map<Method, MetaHolder> registry = new HashMap<>();
+        private final Map<Method, MetaHolder> registry = new ConcurrentHashMap<>();
 
         public MetaHolder create(MethodInvocation invocation) {
             Object proxy = invocation.getThis();
