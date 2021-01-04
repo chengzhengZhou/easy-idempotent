@@ -7,6 +7,7 @@ import cn.carbank.idempotent.exception.IdempotentRuntimeException;
 import cn.carbank.idempotent.exception.MethodExecuteException;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -44,10 +45,6 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        Method method = invocation.getMethod();
-        if (!method.isAnnotationPresent(Idempotent.class)) {
-            throw new IllegalStateException("method should be annotated with Idempotent.");
-        }
         MetaHolder metaHolder = metaHolderFactory.create(invocation);
         IdempotentInvokable idempotentInvokable = IdempotentInvokableFactory.getInstance().create(metaHolder, invocation, config, applicationContext);
         Object result;
@@ -82,7 +79,7 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
     }
 
     private static class MetaHolderFactory {
-
+        private final Class<Idempotent> annotationClass = Idempotent.class;
         private final Map<Method, MetaHolder> registry = new ConcurrentHashMap<>();
 
         public MetaHolder create(MethodInvocation invocation) {
@@ -97,8 +94,13 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
         }
 
         private MetaHolder create(Object proxy, Method method) {
-            Idempotent idempotent = AnnotationUtils.findAnnotation(method, Idempotent.class);
-            MetaHolder metaHolder = new MetaHolder(proxy, method);
+            Method targetMethod = getTargetMethod(method, AopUtils.getTargetClass(proxy));
+            Idempotent idempotent = null;
+            if ((idempotent = AnnotationUtils.findAnnotation(targetMethod, annotationClass)) == null) {
+                throw new IllegalStateException("method should be annotated with Idempotent.");
+            }
+
+            MetaHolder metaHolder = new MetaHolder(proxy, targetMethod);
             metaHolder.setIdempotent(idempotent);
 
             Class<?>[] parameterTypes = method.getParameterTypes();
@@ -106,6 +108,18 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
             Assert.notNull(idempotentMethod, "Idempotent method is required.");
             metaHolder.setIdempotentMethod(BridgeMethodResolver.findBridgedMethod(idempotentMethod));
             return metaHolder;
+        }
+
+        private Method getTargetMethod(Method method, Class targetClass) {
+            if (method.isAnnotationPresent(annotationClass)) {
+                return method;
+            } else {
+                Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
+                if (specificMethod != method && specificMethod.isAnnotationPresent(annotationClass)) {
+                    return specificMethod;
+                }
+            }
+            return null;
         }
 
         private Method getMethod(Class<?> type, String name, Class<?>... parameterTypes) {

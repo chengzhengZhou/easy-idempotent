@@ -36,9 +36,7 @@ public interface IdempotentRecordRepo {
      * @param key
      * @return
      */
-    default IdempotentRecord get(String key){
-        return null;
-    }
+    IdempotentRecord get(String key);
 
     /**
      * 删除指定key的记录
@@ -47,8 +45,6 @@ public interface IdempotentRecordRepo {
      * @param key
      * @return
      */
-    default boolean delete(String key) {
-        return false;
-    }
+    boolean delete(String key);
 
 }

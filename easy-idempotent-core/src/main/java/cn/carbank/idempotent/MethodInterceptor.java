@@ -8,15 +8,9 @@ package cn.carbank.idempotent;
  */
 public interface MethodInterceptor {
 
-    default boolean preProcess(IdempotentRequest methodInfo) {
-        return true;
-    }
+    boolean preProcess(IdempotentRequest methodInfo);
 
-    default void postProcess(Object re, IdempotentRequest methodInfo) {
+    void postProcess(Object re, IdempotentRequest methodInfo);
 
-    }
-
-    default void errorProcess(Exception exception, IdempotentRequest methodInfo) {
-
-    }
+    void errorProcess(Exception exception, IdempotentRequest methodInfo);
 }

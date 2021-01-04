@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -65,7 +66,12 @@ abstract class AbstractCommand<R> {
     private MethodInterceptor initInterceptor(RecordRepositoryFactory recordRepositoryFactory) {
         Map<StorageType, IdempotentRecordRepo> map = recordRepositoryFactory.getRecordRepository();
         DefaultStorageInterceptor storageInterceptor = new DefaultStorageInterceptor(executorService);
-        map.forEach((k, v) -> storageInterceptor.add(k, v));
+        Iterator<StorageType> iterator = map.keySet().iterator();
+        while(iterator.hasNext()) {
+            StorageType next = iterator.next();
+            IdempotentRecordRepo idempotentRecordRepo = map.get(next);
+            storageInterceptor.add(next, idempotentRecordRepo);
+        }
         return storageInterceptor;
     }
 

@@ -14,7 +14,7 @@ import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 public class IdempotentAdvisor extends AbstractBeanFactoryPointcutAdvisor {
 
     public IdempotentAdvisor() {
-        setAdviceBeanName("cn.carbank.IdempotentInterceptor");
+        setAdviceBeanName("idempotentInterceptor");
     }
 
     @Override

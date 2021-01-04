@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 从spring容器中获取存储类
@@ -34,9 +32,10 @@ public class SpringRecordRepositoryFactory extends RecordRepositoryFactory {
             return cache;
         }
         String[] names = applicationContext.getBeanNamesForType(IdempotentRecordRepo.class);
-        List<IdempotentRecordRepo> list = Stream.of(names).map(
-            (beanName) -> applicationContext.getBean(beanName, IdempotentRecordRepo.class))
-            .collect(Collectors.toList());
+        List<IdempotentRecordRepo> list = new ArrayList<>(names.length);
+        for (String name : names) {
+            list.add(applicationContext.getBean(name, IdempotentRecordRepo.class));
+        }
         setMap(list);
         return super.getRecordRepository();
     }
@@ -47,13 +46,13 @@ public class SpringRecordRepositoryFactory extends RecordRepositoryFactory {
             return;
         }
         Map<StorageType, List<IdempotentRecordRepo>> candidates = new HashMap<>();
-        list.forEach((item) -> {
+        for (IdempotentRecordRepo item : list) {
             StorageType storageType = StorageType.ofName(item.getClass().getSimpleName());
             if (candidates.get(storageType) == null) {
-                candidates.put(storageType, new ArrayList<>());
+                candidates.put(storageType, new ArrayList<IdempotentRecordRepo>());
             }
             candidates.get(storageType).add(item);
-        });
+        }
 
         Map<StorageType, IdempotentRecordRepo> map = new HashMap<>();
         Iterator<StorageType> iterator = candidates.keySet().iterator();

@@ -1,10 +1,12 @@
-package cn.carbank.idempotent.locksupport;
+package cn.carbank.idempotent;
 
 import cn.carbank.idempotent.exception.IdempotentRuntimeException;
+import cn.carbank.idempotent.locksupport.Lock;
+import cn.carbank.idempotent.locksupport.LockClient;
+import cn.carbank.idempotent.locksupport.LockModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.Assert;
 
 import java.util.UUID;
@@ -80,7 +82,7 @@ public class RedisLockClient implements LockClient {
             int shortRetryCount = 0;
             int retryCount = 0;
             for(;;) {
-                isLock = template.opsForValue().setIfAbsent(lock, getLockVal(), timeout, timeUnit);
+                isLock = template.setIfAbsent(lock, getLockVal(), timeout, timeUnit);
                 if (isLock) {
                     return true;
                 } else {
@@ -89,7 +91,7 @@ public class RedisLockClient implements LockClient {
                         return false;
                     }
 
-                    String redisVal = template.opsForValue().get(lock);
+                    String redisVal = template.get(lock);
                     if (redisVal == null) {
                         rest = time - (System.currentTimeMillis() - current);
                         shortRetryCount++;
@@ -141,7 +143,7 @@ public class RedisLockClient implements LockClient {
             if (logger.isDebugEnabled()) {
                 logger.debug("is lock {}", lock);
             }
-            String redisVal = template.opsForValue().get(lock);
+            String redisVal = template.get(lock);
             if (redisVal == null) {
                 return false;
             }
@@ -167,6 +169,20 @@ public class RedisLockClient implements LockClient {
             } else {
                 throw new IllegalMonitorStateException("attempt to unlock lock, not locked by current thread by id：" + getLockVal());
             }
+        }
+    }
+
+    static class StringRedisTemplate{
+
+        public void delete(String lock) {
+        }
+
+        public String get(String lock) {
+            return null;
+        }
+
+        public boolean setIfAbsent(String lock, String lockVal, long timeout, TimeUnit timeUnit) {
+            return true;
         }
     }
 

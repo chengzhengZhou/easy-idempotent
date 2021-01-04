@@ -26,15 +26,18 @@ public class MemoryIdempotentRecordRepoImpl implements IdempotentRecordRepo {
     public static final DelayQueue<DelayedTask> DELAYED_TASKS = new DelayQueue<>();
 
     static {
-        Thread t = new Thread(() -> {
-            try {
-                while (!Thread.interrupted()) {
-                    DELAYED_TASKS.take().run();
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (!Thread.interrupted()) {
+                        DELAYED_TASKS.take().run();
+                    }
+                } catch (InterruptedException e) {
+                    logger.error("consume delay tasks interrupted.", e);
                 }
-            } catch (InterruptedException e) {
-                logger.error("consume delay tasks interrupted.", e);
             }
-        });
+        };
         t.setDaemon(true);
         t.setPriority(Thread.MIN_PRIORITY);
         t.start();

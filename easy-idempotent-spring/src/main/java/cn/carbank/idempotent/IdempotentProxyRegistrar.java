@@ -23,11 +23,11 @@ public class IdempotentProxyRegistrar implements ImportBeanDefinitionRegistrar, 
         if (present) {
             return;
         }
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(IdempotentAdvisor.class);
-        registry.registerBeanDefinition(IdempotentAdvisor.class.getName(), builder.getBeanDefinition());
-
         BeanDefinitionBuilder builder1 = BeanDefinitionBuilder.genericBeanDefinition(IdempotentInterceptor.class);
-        registry.registerBeanDefinition(IdempotentInterceptor.class.getName(), builder1.getBeanDefinition());
+        registry.registerBeanDefinition("idempotentInterceptor", builder1.getBeanDefinition());
+
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(IdempotentAdvisor.class);
+        registry.registerBeanDefinition("idempotentAdvisor", builder.getBeanDefinition());
     }
 
     @Override

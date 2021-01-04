@@ -18,18 +18,21 @@ public class Tester {
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newCachedThreadPool();
-        CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
         for (int i = 0; i < 10; i++) {
-            executorService.execute(() -> {
-                MyCommand command = new MyCommand("NO1001", "NO1001");
-                try {
-                    latch.await();
-                    Thread.sleep((int) (Math.random() * 500));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    MyCommand command = new MyCommand("NO1001", "NO1001");
+                    try {
+                        latch.await();
+                        Thread.sleep((int) (Math.random() * 500));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    String execute = command.execute();
+                    System.out.println(execute);
                 }
-                String execute = command.execute();
-                System.out.println(execute);
             });
         }
         latch.countDown();

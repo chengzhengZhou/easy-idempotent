@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
-import java.util.stream.Stream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * 存储聚合操作
@@ -28,7 +28,7 @@ public class IdempotentRepoComposite {
 
     public IdempotentRepoComposite(ExecutorService executor) {
         if (executor == null) {
-            this.executor = ForkJoinPool.commonPool();
+            this.executor = Executors.newFixedThreadPool(Math.min(10, Runtime.getRuntime().availableProcessors()));
         } else {
             this.executor = executor;
         }
@@ -38,34 +38,38 @@ public class IdempotentRepoComposite {
         map.put(storeModuleName, idempotentRecordRepo);
     }
 
-    public boolean add(String key, String value, List<StorageConfig> configList) {
+    public boolean add(final String key, final String value, List<StorageConfig> configList) {
         if (configList.size() == 1) {
             StorageConfig config = configList.get(0);
             return map.get(config.getStorageModule().name()).add(key, value, config.getExpireTime(), config.getTimeUnit());
         }
-        CompletableFuture<Boolean>[] futures = new CompletableFuture[configList.size()];
+        Future<Boolean>[] futures = new Future[configList.size()];
         for (int i = 0; i < configList.size(); i++) {
-            StorageConfig config = configList.get(i);
-            CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(
-                () -> map.get(config.getStorageModule().name()).add(key, value, config.getExpireTime(), config.getTimeUnit()),
-                executor);
-            futures[i] = future;
+            final StorageConfig config = configList.get(i);
+            futures[i] = executor.submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return map.get(config.getStorageModule().name()).add(key, value, config.getExpireTime(), config.getTimeUnit());
+                }
+            });
         }
         return merge(futures);
     }
 
-    public boolean exist(String key, List<StorageConfig> configList) {
+    public boolean exist(final String key, List<StorageConfig> configList) {
         if (configList.size() == 1) {
             StorageConfig config = configList.get(0);
             return map.get(config.getStorageModule().name()).exist(key);
         }
-        CompletableFuture<Boolean>[] futures = new CompletableFuture[configList.size()];
+        Future<Boolean>[] futures = new Future[configList.size()];
         for (int i = 0; i < configList.size(); i++) {
-            StorageConfig config = configList.get(i);
-            CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(
-                () -> map.get(config.getStorageModule().name()).exist(key),
-                executor);
-            futures[i] = future;
+            final StorageConfig config = configList.get(i);
+            futures[i] = executor.submit(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return map.get(config.getStorageModule().name()).exist(key);
+                }
+            });
         }
         return merge(futures);
     }
@@ -74,14 +78,46 @@ public class IdempotentRepoComposite {
         return executor;
     }
 
-    private boolean merge(CompletableFuture<Boolean>[] futures) {
-        CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futures);
-        try {
-            combinedFuture.get();
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("merge future fail 【{}】", combinedFuture, e);
+    private boolean merge(Future<Boolean>[] futures) {
+        boolean isDone = false;
+        Future<Boolean>[] newFutures = futures;
+        int count = 10;
+        while(!isDone) {
+            if (newFutures.length <= 0) {
+                break;
+            }
+            for (int i = 0 ; i < newFutures.length; i++) {
+                Future<Boolean> f = newFutures[i];
+                if (f.isDone() || count < 0) {
+                    try {
+                        if (f.get()) {
+                            isDone = true;
+                        } else {
+                            // 移除
+                            f = null;
+                            newFutures = removeIdx(newFutures, i);
+                        }
+                        break;
+                    } catch (InterruptedException | ExecutionException e) {
+                        logger.error("merge future fail 【{}】", f, e);
+                    }
+                }
+            }
+            count--;
         }
+        return isDone;
+    }
 
-        return Stream.of(futures).map(CompletableFuture::join).filter((val) -> val == true).count() > 0;
+    private Future<Boolean>[] removeIdx(Future<Boolean>[] fs, int idx) {
+        Future<Boolean>[] newFs = new Future[fs.length - 1];
+        if (newFs.length > 0) {
+            for (int i = 0, j = 0; i < fs.length; i++) {
+                if (i != idx) {
+                    newFs[j] = fs[i];
+                    j++;
+                }
+            }
+        }
+        return newFs;
     }
 }
