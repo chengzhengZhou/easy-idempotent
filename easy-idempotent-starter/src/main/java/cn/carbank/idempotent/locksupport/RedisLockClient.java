@@ -85,7 +85,7 @@ public class RedisLockClient implements LockClient {
                     return true;
                 } else {
                     rest = time - (System.currentTimeMillis() - current);
-                    if(rest < 0) {
+                    if(rest < 0 || Thread.currentThread().isInterrupted()) {
                         return false;
                     }
 
@@ -105,7 +105,7 @@ public class RedisLockClient implements LockClient {
                             return true;
                         } else {
                             rest = time - (System.currentTimeMillis() - current);
-                            if (rest < 0) {
+                            if (rest < 0 || Thread.currentThread().isInterrupted()) {
                                 return false;
                             }
                             retryCount++;
