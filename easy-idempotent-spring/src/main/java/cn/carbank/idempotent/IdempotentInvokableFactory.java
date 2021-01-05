@@ -73,9 +73,6 @@ public class IdempotentInvokableFactory {
         if (this.executorService != null) {
             return this.executorService;
         }
-        if (config.getStorage() == null || config.getStorage().size() <= 1) {
-            return null;
-        }
         synchronized(INSTANCE) {
             if (this.executorService != null) {
                 return this.executorService;
