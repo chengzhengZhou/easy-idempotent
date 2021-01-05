@@ -1,46 +1,57 @@
 package cn.carbank.idempotent;
 
+import cn.carbank.idempotent.config.DynamicConfigLoader;
+import cn.carbank.idempotent.config.IdempotentConfig;
 import cn.carbank.idempotent.exception.IdempotentRuntimeException;
 import cn.carbank.idempotent.locksupport.Lock;
 import cn.carbank.idempotent.locksupport.LockClient;
 import cn.carbank.idempotent.locksupport.LockModel;
+import com.zuche.redis.core.ValueCommands;
+import com.zuche.redis.factory.RedisFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 请填写类注释
+ * 基于base-dao-redis做的锁，该类库不支持发送脚本因此非完美方案
+ * 因此建议设置合理的失效时间，避免在失效边界出现误删问题
  *
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月22日
  */
-public class RedisLockClient implements LockClient {
+@Lazy
+public class RedisLockClient implements LockClient, InitializingBean {
 
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Autowired
-    public void setTemplate(StringRedisTemplate stringRedisTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
+    private ValueCommands commands;
+    private int nameSpace = 1;
 
     @Override
     public Lock getLock(String lock, LockModel lockModel) {
         Assert.notNull(lock, "lock key is required.");
-        return new RedisLock(lock, stringRedisTemplate);
+        return new RedisLock(lock);
     }
 
-    static class RedisLock implements Lock {
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        IdempotentConfig config = DynamicConfigLoader.load();
+        String groupName = config.getGroupName();
+        Assert.notNull(groupName, "idempotent.lock.group_name is required.");
+        int namespace = config.getNamespace();
+        this.nameSpace = namespace;
+        this.commands = RedisFactory.getClusterValueCommands(groupName);
+    }
+
+    private class RedisLock implements Lock {
         private final Logger logger = LoggerFactory.getLogger(RedisLock.class);
-        private StringRedisTemplate template;
         private String lock;
         private UUID uuid;
 
-        public RedisLock(String lock, StringRedisTemplate template) {
-            this.template = template;
+        public RedisLock(String lock) {
             this.lock = lock;
             this.uuid = UUID.randomUUID();
         }
@@ -82,7 +93,7 @@ public class RedisLockClient implements LockClient {
             int shortRetryCount = 0;
             int retryCount = 0;
             for(;;) {
-                isLock = template.setIfAbsent(lock, getLockVal(), timeout, timeUnit);
+                isLock = commands.setIfAbsent(nameSpace, lock, getLockVal(), timeout, timeUnit);
                 if (isLock) {
                     return true;
                 } else {
@@ -91,7 +102,7 @@ public class RedisLockClient implements LockClient {
                         return false;
                     }
 
-                    String redisVal = template.get(lock);
+                    String redisVal = commands.get(nameSpace, lock);
                     if (redisVal == null) {
                         rest = time - (System.currentTimeMillis() - current);
                         shortRetryCount++;
@@ -143,7 +154,7 @@ public class RedisLockClient implements LockClient {
             if (logger.isDebugEnabled()) {
                 logger.debug("is lock {}", lock);
             }
-            String redisVal = template.get(lock);
+            String redisVal = commands.get(nameSpace, lock);
             if (redisVal == null) {
                 return false;
             }
@@ -165,25 +176,10 @@ public class RedisLockClient implements LockClient {
                 logger.debug("unlock {}", lock);
             }
             if (isLock()) {
-                template.delete(lock);
+                commands.delete(nameSpace, lock);
             } else {
                 throw new IllegalMonitorStateException("attempt to unlock lock, not locked by current thread by id：" + getLockVal());
             }
         }
     }
-
-    static class StringRedisTemplate{
-
-        public void delete(String lock) {
-        }
-
-        public String get(String lock) {
-            return null;
-        }
-
-        public boolean setIfAbsent(String lock, String lockVal, long timeout, TimeUnit timeUnit) {
-            return true;
-        }
-    }
-
 }

@@ -75,7 +75,7 @@ public class IdempotentInterceptor implements MethodInterceptor, ApplicationCont
     }
 
     private void valid() {
-        //Assert.notNull(this.config.getGroupName(), "idempotent.lock.group_name is required.");
+        Assert.notNull(this.config.getGroupName(), "idempotent.lock.group_name is required.");
     }
 
     private static class MetaHolderFactory {
