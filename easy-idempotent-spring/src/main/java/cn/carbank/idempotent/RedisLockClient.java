@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Lazy
 public class RedisLockClient implements LockClient, InitializingBean {
-
+    private static final Logger logger = LoggerFactory.getLogger(RedisLockClient.class);
     private ValueCommands commands;
     private int nameSpace = 1;
 
@@ -47,7 +47,6 @@ public class RedisLockClient implements LockClient, InitializingBean {
     }
 
     private class RedisLock implements Lock {
-        private final Logger logger = LoggerFactory.getLogger(RedisLock.class);
         private String lock;
         private UUID uuid;
 

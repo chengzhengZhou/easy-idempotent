@@ -1,5 +1,6 @@
 package cn.carbank.idempotent;
 
+import cn.carbank.idempotent.repository.RedisIdempotentRepoImpl;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -23,11 +24,22 @@ public class IdempotentProxyRegistrar implements ImportBeanDefinitionRegistrar, 
         if (present) {
             return;
         }
-        BeanDefinitionBuilder builder1 = BeanDefinitionBuilder.genericBeanDefinition(IdempotentInterceptor.class);
-        registry.registerBeanDefinition("idempotentInterceptor", builder1.getBeanDefinition());
+        BeanDefinitionBuilder idempotentInterceptorDefinition = BeanDefinitionBuilder.genericBeanDefinition(IdempotentInterceptor.class);
+        registry.registerBeanDefinition("idempotentInterceptor", idempotentInterceptorDefinition.getBeanDefinition());
 
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(IdempotentAdvisor.class);
-        registry.registerBeanDefinition("idempotentAdvisor", builder.getBeanDefinition());
+        BeanDefinitionBuilder idempotentAdvisorDefinition = BeanDefinitionBuilder.genericBeanDefinition(IdempotentAdvisor.class);
+        registry.registerBeanDefinition("idempotentAdvisor", idempotentAdvisorDefinition.getBeanDefinition());
+
+        if (!registry.containsBeanDefinition("redisLockClient")) {
+            BeanDefinitionBuilder lockClientDefinition = BeanDefinitionBuilder.genericBeanDefinition(RedisLockClient.class);
+            lockClientDefinition.setLazyInit(true);
+            registry.registerBeanDefinition("redisLockClient", lockClientDefinition.getBeanDefinition());
+        }
+        if (!registry.containsBeanDefinition("redisIdempotentRepoImpl")) {
+            BeanDefinitionBuilder repoDefinition = BeanDefinitionBuilder.genericBeanDefinition(RedisIdempotentRepoImpl.class);
+            repoDefinition.setLazyInit(true);
+            registry.registerBeanDefinition("redisIdempotentRepoImpl", repoDefinition.getBeanDefinition());
+        }
     }
 
     @Override
