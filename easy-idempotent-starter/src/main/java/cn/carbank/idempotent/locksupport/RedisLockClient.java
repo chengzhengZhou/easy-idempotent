@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2020年12月22日
  */
 public class RedisLockClient implements LockClient {
-    private static final ThreadLocal<Map<String, Map<String, Integer>>> MONITOR = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, RedisLock>> LOCAL_LOCK = new ThreadLocal<>();
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
@@ -30,7 +30,16 @@ public class RedisLockClient implements LockClient {
     @Override
     public Lock getLock(String lock, LockModel lockModel) {
         Assert.notNull(lock, "lock key is required.");
-        return new RedisLock(lock, stringRedisTemplate);
+        Map<String, RedisLock> lockMap = LOCAL_LOCK.get();
+        if (lockMap == null) {
+            lockMap = new HashMap<>();
+            LOCAL_LOCK.set(lockMap);
+        }
+        if (!lockMap.containsKey(lock)) {
+            lockMap.put(lock, new RedisLock(lock, stringRedisTemplate));
+        }
+
+        return lockMap.get(lock);
     }
 
     static class RedisLock implements Lock {
@@ -38,6 +47,7 @@ public class RedisLockClient implements LockClient {
         private StringRedisTemplate template;
         private String lock;
         private UUID uuid;
+        private int monitor;
 
         public RedisLock(String lock, StringRedisTemplate template) {
             this.template = template;
@@ -180,32 +190,16 @@ public class RedisLockClient implements LockClient {
         }
 
         private void countLock() {
-            String lockVal = getLockVal();
-            Map<String, Map<String, Integer>> map = MONITOR.get();
-            if (map == null) {
-                map = new HashMap<>();
-                map.put(this.lock, new HashMap<String, Integer>());
-                MONITOR.set(map);
-            }
-            Map<String, Integer> lock = map.get(this.lock);
-            if (lock.containsKey(lockVal)) {
-                lock.put(lockVal, lock.get(lockVal) + 1);
-            } else {
-                lock.put(lockVal, 1);
-            }
+            monitor++;
         }
 
         private Integer countDownLock() {
-            String lockVal = getLockVal();
-            Map<String, Map<String, Integer>> map = MONITOR.get();
-            if (map == null || !map.containsKey(this.lock) || !map.get(this.lock).containsKey(lockVal)) {
+            if (monitor == 0) {
                 return 0;
             }
-            Map<String, Integer> lock = map.get(this.lock);
-            Integer count = lock.get(lockVal) - 1;
-            lock.put(lockVal, count);
+            int count = monitor - 1;
             if (count <= 0) {
-                MONITOR.remove();
+                LOCAL_LOCK.remove();
             }
             return count;
         }
