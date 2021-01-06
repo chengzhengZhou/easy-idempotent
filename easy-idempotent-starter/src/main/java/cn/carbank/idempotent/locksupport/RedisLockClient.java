@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2020年12月22日
  */
 public class RedisLockClient implements LockClient {
-
+    private static final ThreadLocal<Map<String, Map<String, Integer>>> MONITOR = new ThreadLocal<>();
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
@@ -82,6 +84,7 @@ public class RedisLockClient implements LockClient {
             for(;;) {
                 isLock = template.opsForValue().setIfAbsent(lock, getLockVal(), timeout, timeUnit);
                 if (isLock) {
+                    countLock();
                     return true;
                 } else {
                     rest = time - (System.currentTimeMillis() - current);
@@ -102,8 +105,12 @@ public class RedisLockClient implements LockClient {
                         continue;
                     } else {
                         if (getLockVal().equals(redisVal)) {
+                            template.expire(lock, timeout, timeUnit);
+                            countLock();
                             return true;
                         } else {
+                            // 防止锁重入期间被其他线程抢占
+                            countDownLock();
                             rest = time - (System.currentTimeMillis() - current);
                             if (rest < 0 || Thread.currentThread().isInterrupted()) {
                                 return false;
@@ -162,11 +169,45 @@ public class RedisLockClient implements LockClient {
             if (logger.isDebugEnabled()) {
                 logger.debug("unlock {}", lock);
             }
-            if (isLock()) {
-                template.delete(lock);
-            } else {
-                throw new IllegalMonitorStateException("attempt to unlock lock, not locked by current thread by id：" + getLockVal());
+            Integer count = countDownLock();
+            if (count <= 0) {
+                if(isLock()) {
+                    template.delete(this.lock);
+                } else {
+                    throw new IllegalMonitorStateException("attempt to unlock lock, not locked by current thread by id：" + getLockVal());
+                }
             }
+        }
+
+        private void countLock() {
+            String lockVal = getLockVal();
+            Map<String, Map<String, Integer>> map = MONITOR.get();
+            if (map == null) {
+                map = new HashMap<>();
+                map.put(this.lock, new HashMap<String, Integer>());
+                MONITOR.set(map);
+            }
+            Map<String, Integer> lock = map.get(this.lock);
+            if (lock.containsKey(lockVal)) {
+                lock.put(lockVal, lock.get(lockVal) + 1);
+            } else {
+                lock.put(lockVal, 1);
+            }
+        }
+
+        private Integer countDownLock() {
+            String lockVal = getLockVal();
+            Map<String, Map<String, Integer>> map = MONITOR.get();
+            if (map == null || !map.containsKey(this.lock) || !map.get(this.lock).containsKey(lockVal)) {
+                return 0;
+            }
+            Map<String, Integer> lock = map.get(this.lock);
+            Integer count = lock.get(lockVal) - 1;
+            lock.put(lockVal, count);
+            if (count <= 0) {
+                MONITOR.remove();
+            }
+            return count;
         }
     }
 
