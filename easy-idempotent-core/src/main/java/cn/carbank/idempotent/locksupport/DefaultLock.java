@@ -23,6 +23,8 @@ public class DefaultLock implements Lock {
 
     private ReentrantLock reentrantLock;
 
+    private int monitor;
+
     public DefaultLock(String lockName) {
         this.lockName = lockName;
         ReentrantLock lock = new ReentrantLock();
@@ -40,6 +42,7 @@ public class DefaultLock implements Lock {
             logger.debug("DefaultLock#lock {}", lockName);
         }
         reentrantLock.lock();
+        monitor++;
     }
 
     @Override
@@ -47,7 +50,11 @@ public class DefaultLock implements Lock {
         if (logger.isDebugEnabled()) {
             logger.debug("DefaultLock#tryLock {}", lockName);
         }
-        return reentrantLock.tryLock(tryTimeout, timeUnit);
+        boolean locked = reentrantLock.tryLock(tryTimeout, timeUnit);
+        if (locked) {
+            monitor++;
+        }
+        return locked;
     }
 
     @Override
@@ -63,7 +70,12 @@ public class DefaultLock implements Lock {
         if (logger.isDebugEnabled()) {
             logger.debug("DefaultLock#unlock {}", lockName);
         }
+        monitor--;
+        if (monitor <= 0) {
+            DefaultLockClient.LOCAL_LOCK.remove();
+        }
+        LOCK_MAP.remove(lockName);
+
         reentrantLock.unlock();
-        ReentrantLock remove = LOCK_MAP.remove(lockName);
     }
 }
