@@ -197,11 +197,10 @@ public class RedisLockClient implements LockClient {
             if (monitor == 0) {
                 return 0;
             }
-            int count = monitor - 1;
-            if (count <= 0) {
+            if (--monitor <= 0) {
                 LOCAL_LOCK.remove();
             }
-            return count;
+            return monitor;
         }
     }
 
