@@ -13,8 +13,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 请填写类注释
- *
+ * 获取redis锁
+ * 强烈推荐使用Redisson来支持锁，该实现方式只在不使用lua脚本下尽可能的通过template api保证锁可靠
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月22日
  */
@@ -41,13 +41,16 @@ public class RedisLockClient implements LockClient {
 
         return lockMap.get(lock);
     }
-
+    /** 由于增加了计数器和状态，该锁类目前仅用单线程 */
     static class RedisLock implements Lock {
         private final Logger logger = LoggerFactory.getLogger(RedisLock.class);
         private StringRedisTemplate template;
         private String lock;
         private UUID uuid;
+        /** 锁计数器，为解决重入期间被其他线程抢占后恢复，提前计数递减以便后续处理 */
         private int monitor;
+        /** 该状态仅为锁当前状态，为解决超时标记 */
+        private boolean localLockState = false;
 
         public RedisLock(String lock, StringRedisTemplate template) {
             this.template = template;
@@ -108,7 +111,7 @@ public class RedisLockClient implements LockClient {
                         shortRetryCount++;
                         retryCount++;
 
-                        // 快速失败，可能是由于key的过期时间过短
+                        // 快速失败，可能是由于key的过期时间过短，或竞争过于激烈
                         if (rest < 0 || shortRetryCount >= 3) {
                             return false;
                         }
@@ -180,7 +183,7 @@ public class RedisLockClient implements LockClient {
                 logger.debug("unlock {}", lock);
             }
             Integer count = countDownLock();
-            if (count <= 0) {
+            if (count <= 0 && localLockState) {
                 if(isLock()) {
                     template.delete(this.lock);
                 } else {
@@ -190,6 +193,7 @@ public class RedisLockClient implements LockClient {
         }
 
         private void countLock() {
+            localLockState = true;
             monitor++;
         }
 

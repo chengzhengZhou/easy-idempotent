@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * redis锁
+ * 单机锁，由于增加计数器，仅限单线程
  *
  * @author 周承钲(chengzheng.zhou @ ucarinc.com)
  * @since 2020年12月14日
