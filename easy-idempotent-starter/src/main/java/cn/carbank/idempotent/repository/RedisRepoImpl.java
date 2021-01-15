@@ -28,7 +28,11 @@ public class RedisRepoImpl implements IdempotentRecordRepo {
         if (logger.isDebugEnabled()) {
             logger.debug("redis add key:{} expireTime:{}", key, expireTime);
         }
-        return stringRedisTemplate.opsForValue().setIfAbsent(key, value, expireTime, timeUnit);
+        if (expireTime <= 0) {
+            return stringRedisTemplate.opsForValue().setIfAbsent(key, value);
+        } else {
+            return stringRedisTemplate.opsForValue().setIfAbsent(key, value, expireTime, timeUnit);
+        }
     }
 
     @Override
