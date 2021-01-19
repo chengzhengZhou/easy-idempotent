@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  */
 public class IdempotentRepoComposite {
 
-    private final Logger logger = LoggerFactory.getLogger(IdempotentRepoComposite.class);
+    private static final Logger logger = LoggerFactory.getLogger(IdempotentRepoComposite.class);
     private final Map<String, IdempotentRecordRepo> map = new HashMap<>();
 
     private final ExecutorService executor;

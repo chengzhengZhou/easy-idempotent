@@ -25,6 +25,10 @@ public abstract class IdempotentCommand<R> extends AbstractCommand<R> implements
         super(idempotentRequest, executorService, lockClientFactory, recordRepositoryFactory);
     }
 
+    protected IdempotentCommand(IdempotentRequest idempotentRequest, LockClientFactory lockClientFactory, MethodInterceptor methodInterceptor) {
+        super(idempotentRequest, lockClientFactory, methodInterceptor);
+    }
+
     public IdempotentCommand(Setter setter) {
         super(setter);
     }

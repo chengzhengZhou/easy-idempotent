@@ -1,7 +1,5 @@
 package cn.carbank.idempotent;
 
-import java.util.concurrent.ExecutorService;
-
 /**
  * 通过注解的方法被解析后包装幂等实现类而被执行
  *
@@ -14,12 +12,11 @@ public class GenericCommand extends IdempotentCommand<Object> {
 
     private CommandAction idempotentAction;
 
-    GenericCommand(CommandAction executionAction, CommandAction idempotentAction,
-                   IdempotentRequest idempotentRequest,
-                   ExecutorService executorService,
-                   LockClientFactory lockClientFactory,
-                   RecordRepositoryFactory recordRepositoryFactory) {
-        super(idempotentRequest, executorService, lockClientFactory, recordRepositoryFactory);
+    public GenericCommand(CommandAction executionAction, CommandAction idempotentAction,
+                          IdempotentRequest idempotentRequest,
+                          LockClientFactory lockClientFactory,
+                          MethodInterceptor methodInterceptor) {
+        super(idempotentRequest, lockClientFactory, methodInterceptor);
         this.executionAction = executionAction;
         this.idempotentAction = idempotentAction;
     }

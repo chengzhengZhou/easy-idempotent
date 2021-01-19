@@ -62,6 +62,12 @@ abstract class AbstractCommand<R> {
         this.interceptor = initInterceptor(recordRepositoryFactory);
     }
 
+    AbstractCommand(IdempotentRequest idempotentRequest, LockClientFactory lockClientFactory, MethodInterceptor methodInterceptor ) {
+        this.idempotentRequest = idempotentRequest;
+        this.lockClient = lockClientFactory.getClient();
+        this.interceptor = methodInterceptor;
+    }
+
     private MethodInterceptor initInterceptor(RecordRepositoryFactory recordRepositoryFactory) {
         Map<StorageType, IdempotentRecordRepo> map = recordRepositoryFactory.getRecordRepository();
         DefaultStorageInterceptor storageInterceptor = new DefaultStorageInterceptor(executorService);

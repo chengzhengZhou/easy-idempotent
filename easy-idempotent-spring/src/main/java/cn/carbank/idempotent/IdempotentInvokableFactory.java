@@ -3,7 +3,10 @@ package cn.carbank.idempotent;
 import cn.carbank.idempotent.annotation.Idempotent;
 import cn.carbank.idempotent.annotation.StorageParam;
 import cn.carbank.idempotent.config.IdempotentConfig;
+import cn.carbank.idempotent.constant.StorageType;
 import cn.carbank.idempotent.exception.MethodExecuteException;
+import cn.carbank.idempotent.interceptor.DefaultStorageInterceptor;
+import cn.carbank.idempotent.repository.IdempotentRecordRepo;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.MethodParameter;
@@ -20,6 +23,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -34,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class IdempotentInvokableFactory {
 
     private static final IdempotentInvokableFactory INSTANCE = new IdempotentInvokableFactory();
-    private ExecutorService executorService;
+    private MethodInterceptor methodInterceptor;
     private final ExpressionParser parser = new SpelExpressionParser();
     private final SpringLockClientFactory lockClientFactory = new SpringLockClientFactory();
     private final SpringRecordRepositoryFactory recordRepositoryFactory = new SpringRecordRepositoryFactory();
@@ -48,11 +52,9 @@ public class IdempotentInvokableFactory {
         CommandAction idempotentAct = new MethodExecutionAction(metaHolder.getBean(), metaHolder.getIdempotentMethod(), invocation.getArguments());
 
         LockClientFactory lockClientFactory = getLockClientFactory(applicationContext);
-        RecordRepositoryFactory recordRepositoryFactory = getRecordRepositoryFactory(applicationContext);
+        MethodInterceptor methodInterceptor = getMethodInterceptor(config, applicationContext);
 
-        ExecutorService executor = getExecutor(config);
-
-        return new GenericCommand(execution, idempotentAct, idempotentRequest, executor, lockClientFactory, recordRepositoryFactory);
+        return new GenericCommand(execution, idempotentAct, idempotentRequest, lockClientFactory, methodInterceptor);
     }
 
     private LockClientFactory getLockClientFactory(ApplicationContext applicationContext) {
@@ -69,17 +71,22 @@ public class IdempotentInvokableFactory {
         return this.recordRepositoryFactory;
     }
 
-    private ExecutorService getExecutor(IdempotentConfig config) {
-        if (this.executorService != null) {
-            return this.executorService;
+    private MethodInterceptor getMethodInterceptor(IdempotentConfig config, ApplicationContext applicationContext) {
+        if (this.methodInterceptor != null) {
+            return this.methodInterceptor;
         }
         synchronized(INSTANCE) {
-            if (this.executorService != null) {
-                return this.executorService;
+            if (this.methodInterceptor != null) {
+                return this.methodInterceptor;
             }
-            this.executorService = new ThreadPoolExecutor(config.getCore(), config.getMax(), 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+            ExecutorService poor = new ThreadPoolExecutor(config.getCore(), config.getMax(), 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+            RecordRepositoryFactory recordRepositoryFactory = getRecordRepositoryFactory(applicationContext);
+            DefaultStorageInterceptor interceptor = new DefaultStorageInterceptor(poor);
+            Map<StorageType, IdempotentRecordRepo> map = recordRepositoryFactory.getRecordRepository();
+            map.forEach((k, v) -> interceptor.add(k, v));
+            this.methodInterceptor = interceptor;
         }
-        return this.executorService;
+        return this.methodInterceptor;
     }
 
     private IdempotentRequest buildRequest(Idempotent idempotent, MetaHolder metaHolder, Object[] arguments, IdempotentConfig config) {
