@@ -1,5 +1,10 @@
 # easy-idempotent
 简单幂等组件
+
+## License
+Licensed under the Apache License, Version 2.0. Copyright (c) 2020 chengzhengZhou.
+See the `LICENSE` file for details.
+
 # 1  背景
 什么是幂等，百度词条定义为：“在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同”。
 基本上所有业务系统中的幂等都是各自进行处理，采用统一处理，需要考虑的内容会比较多。核心的业务还是适合业务方自己去处理，比如订单支付，会有支付记录表，一个订单只能被支付一次，通过支付记录表就可以达到幂等的效果。

@@ -10,9 +10,17 @@
     <version>1.0-SNAPSHOT</version>
     <description>幂等组件</description>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <developers>
         <developer>
-            <name>chengzhengzhou</name>
+            <name>chengzhengZhou</name>
             <email>286028413@qq.com</email>
         </developer>
     </developers>
