@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * 继承该基类可实现通用幂等逻辑
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月17日
  */
 public abstract class IdempotentCommand<R> extends AbstractCommand<R> implements IdempotentInvokable<R> {

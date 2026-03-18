@@ -11,7 +11,7 @@ import java.util.ServiceLoader;
 /**
  * 数据存储类获取
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月18日
  */
 public class RecordRepositoryFactory {

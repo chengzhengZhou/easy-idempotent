@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * 在jdk8前无法从class中获取参数名称
  * 因此需要添加指定注解以便获取到实际参数名称
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月16日
  */
 @Target(ElementType.PARAMETER)

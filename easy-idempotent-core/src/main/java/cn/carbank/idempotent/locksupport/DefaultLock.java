@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 单机锁，由于增加计数器，仅限单线程
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public class DefaultLock implements Lock {

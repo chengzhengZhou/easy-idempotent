@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 幂等记录存储读取
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public interface IdempotentRecordRepo {

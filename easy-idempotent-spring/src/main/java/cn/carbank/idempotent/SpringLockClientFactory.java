@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
  * 锁客户端获取工厂
  * 从spring容器中获取
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月19日
  */
 public class SpringLockClientFactory extends LockClientFactory {

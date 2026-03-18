@@ -11,7 +11,7 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * 请填写类注释
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月18日
  */
 public class Tester {

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 配置信息
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月16日
  */
 public class IdempotentConfig {

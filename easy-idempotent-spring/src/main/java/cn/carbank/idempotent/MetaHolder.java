@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 元数据信息
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月18日
  */
 public class MetaHolder {

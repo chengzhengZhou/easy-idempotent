@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * 存储聚合操作
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public class IdempotentRepoComposite {

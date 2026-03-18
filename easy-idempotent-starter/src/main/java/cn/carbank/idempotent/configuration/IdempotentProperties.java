@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 配置
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月23日
  */
 @ConfigurationProperties(prefix = "idempotent")

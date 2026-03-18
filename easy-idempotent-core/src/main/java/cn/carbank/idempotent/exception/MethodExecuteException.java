@@ -3,7 +3,7 @@ package cn.carbank.idempotent.exception;
 /**
  * 方法执行异常
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月15日
  */
 public class MethodExecuteException extends RuntimeException {

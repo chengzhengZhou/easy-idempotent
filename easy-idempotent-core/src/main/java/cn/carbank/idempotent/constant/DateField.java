@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 时间字段枚举
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public enum DateField {

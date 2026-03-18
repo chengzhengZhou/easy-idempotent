@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * redis存储
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月21日
  */
 public class RedisRepoImpl implements IdempotentRecordRepo {

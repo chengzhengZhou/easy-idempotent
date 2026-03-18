@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 幂等注解
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月16日
  */
 @Target(ElementType.METHOD)

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 获取redis锁
  * 强烈推荐使用Redisson来支持锁，该实现方式只在不使用lua脚本下尽可能的通过template api保证锁可靠
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月22日
  */
 public class RedisLockClient implements LockClient {

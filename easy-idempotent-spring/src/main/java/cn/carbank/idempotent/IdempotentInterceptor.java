@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 拦截器
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月16日
  */
 public class IdempotentInterceptor implements MethodInterceptor, ApplicationContextAware, InitializingBean {

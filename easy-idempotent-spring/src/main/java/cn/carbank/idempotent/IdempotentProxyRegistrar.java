@@ -10,7 +10,7 @@ import org.springframework.util.ClassUtils;
 /**
  * 幂等代理注册
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月16日
  */
 public class IdempotentProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanClassLoaderAware {

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 本地存储
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public class MemoryIdempotentRecordRepoImpl implements IdempotentRecordRepo {

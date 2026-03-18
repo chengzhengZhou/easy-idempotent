@@ -3,7 +3,7 @@ package cn.carbank.idempotent.exception;
 /**
  * 参数异常
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月17日
  */
 public class IdempotentBadRequestException extends RuntimeException {

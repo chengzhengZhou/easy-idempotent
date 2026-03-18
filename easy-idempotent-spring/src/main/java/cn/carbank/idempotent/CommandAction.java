@@ -5,7 +5,7 @@ import cn.carbank.idempotent.exception.MethodExecuteException;
 /**
  * 方法包装，为了方便调用
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月18日
  */
 public interface CommandAction {

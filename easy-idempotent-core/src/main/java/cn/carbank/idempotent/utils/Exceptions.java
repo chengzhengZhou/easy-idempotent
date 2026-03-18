@@ -3,7 +3,7 @@ package cn.carbank.idempotent.utils;
 /**
  * 异常处理
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月18日
  */
 public class Exceptions {

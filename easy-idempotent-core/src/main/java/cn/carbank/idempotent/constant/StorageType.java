@@ -3,7 +3,7 @@ package cn.carbank.idempotent.constant;
 /**
  * 存储模块
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public enum StorageType {

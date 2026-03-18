@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 幂等流程实现
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月17日
  */
 abstract class AbstractCommand<R> {

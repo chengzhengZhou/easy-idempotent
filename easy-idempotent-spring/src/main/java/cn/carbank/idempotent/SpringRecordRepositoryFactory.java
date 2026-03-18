@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 /**
  * 从spring容器中获取存储类
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月19日
  */
 public class SpringRecordRepositoryFactory extends RecordRepositoryFactory {

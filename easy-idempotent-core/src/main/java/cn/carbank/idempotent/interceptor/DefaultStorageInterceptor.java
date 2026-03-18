@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * 存储拦截
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月15日
  */
 public class DefaultStorageInterceptor implements MethodInterceptor {

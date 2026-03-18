@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 幂等请求信息
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月15日
  */
 public class IdempotentRequest {

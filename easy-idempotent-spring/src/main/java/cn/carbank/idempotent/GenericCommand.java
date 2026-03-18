@@ -3,7 +3,7 @@ package cn.carbank.idempotent;
 /**
  * 通过注解的方法被解析后包装幂等实现类而被执行
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月18日
  */
 public class GenericCommand extends IdempotentCommand<Object> {

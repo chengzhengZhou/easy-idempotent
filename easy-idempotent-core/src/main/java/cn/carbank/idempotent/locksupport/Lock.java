@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 锁门面
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public interface Lock {

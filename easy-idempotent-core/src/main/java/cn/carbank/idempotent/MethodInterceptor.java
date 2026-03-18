@@ -3,7 +3,7 @@ package cn.carbank.idempotent;
 /**
  * 拦截通知
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月15日
  */
 public interface MethodInterceptor {

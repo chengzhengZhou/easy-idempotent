@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 时间工具
  *
- * @author 周承钲(chengzheng.zhou @ ucarinc.com)
+ * @author chengzhengZhou
  * @since 2020年12月14日
  */
 public abstract class DateUtil {
